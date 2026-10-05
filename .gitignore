@@ -1,0 +1,15 @@
+# Environments
+venv/
+env/
+
+# Secrets and Configs
+.env
+serviceAccountKey.json
+kernel-metadata.json
+
+# Python Cache
+__pycache__/
+*.pyc
+
+# Workspaces
+workspace_*/
