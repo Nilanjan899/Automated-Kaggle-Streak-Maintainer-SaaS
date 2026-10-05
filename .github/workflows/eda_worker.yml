@@ -1,0 +1,36 @@
+name: Daily Kaggle EDA Bot
+
+on:
+  schedule:
+    # Runs every day at midnight UTC (change as needed)
+    - cron: '0 0 * * *'
+  workflow_dispatch: 
+    # This allows you to manually trigger the script from a button in the GitHub UI!
+
+jobs:
+  run-eda-pipeline:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Inject Firebase Credentials
+        env:
+          FIREBASE_SECRET: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        run: |
+          echo "$FIREBASE_SECRET" > serviceAccountKey.json
+
+      - name: Run Pipeline
+        run: python main.py
